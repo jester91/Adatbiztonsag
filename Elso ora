@@ -1,18 +1,20 @@
-Euklideszi algoritmus
-class GreaterCommonDivider {
-    public static int gcd(int a, int b) {
-        if(a%b == 0) {
-            return b;
-        } else {
-            return gcd(b, a%b);
-        }
-    }
+package euklideszialgoritmus;
+import java.util.Scanner;
+class EuklidesziAlgoritmus {
+    public static void main(String[] args) {
+        int a, b, temp;
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Kérem az első számot!");
+        a = sc.nextInt();
+        System.out.println("Kérem a második számot!");
+        b = sc.nextInt();
 
-    public static void main(String args[]) {
-        if(args.length != 2) {
-            System.exit(1);
+        while(b>0){
+            temp = b;
+            b = a%b;
+            a = temp;
         }
-        System.out.println( gcd( Integer.parseInt( args[0] ), Integer.parseInt( args[1] ) ) );
-        System.exit(0);
+
+        System.out.println("A két szám legnagyobb közös osztója: " + a);
     }
 }
