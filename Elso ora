@@ -1,0 +1,18 @@
+Euklideszi algoritmus
+class GreaterCommonDivider {
+    public static int gcd(int a, int b) {
+        if(a%b == 0) {
+            return b;
+        } else {
+            return gcd(b, a%b);
+        }
+    }
+
+    public static void main(String args[]) {
+        if(args.length != 2) {
+            System.exit(1);
+        }
+        System.out.println( gcd( Integer.parseInt( args[0] ), Integer.parseInt( args[1] ) ) );
+        System.exit(0);
+    }
+}
