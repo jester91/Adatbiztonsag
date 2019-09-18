@@ -1,0 +1,87 @@
+package com.company;
+
+
+
+public class Main {
+
+    public static void main(String[] args) {
+        kibovitett(139, 14);
+        modinvers(139, 14);
+    }
+
+    public static void kibovitett(int a, int b) {
+        int x0 = 1;
+        int x1 = 0;
+        int y0 = 0;
+        int y1 = 1;
+        int r, q, x, y;
+        int s = 1;
+
+        while (b != 0) {
+            r = a % b;
+            q = a / b;
+            a = b;
+            b = r;
+
+            x = x1;
+            y = y1;
+
+            x1 = q * x1 + x0;
+            y1 = q * y1 + y0;
+
+            x0 = x;
+            y0 = y;
+            s = -s;
+
+
+        }
+        x = s * x0;
+        y = s * (-y0);
+        System.out.println(a + " " + x + " " + y);
+
+    }
+
+    public static void modinvers(int a, int m) {
+        int m0 = m;
+        int x = 1;
+        int y = 0;
+        int q, b;
+
+
+        if (m == 1) {
+            System.out.println(0);
+            ;
+        }
+        while (a > 1) {
+            q = a / m;
+            b = m;
+            m = a % m;
+            a = b;
+            b = y;
+            y = x - q * y;
+            x = b;
+
+
+        }
+        if (x < 0) {
+            x += m0;
+        }
+
+        System.out.println(x);
+    }
+
+    public static void titkositas(String msg) {
+        String CTxT = "";
+        int a = 5;
+        int b = 8;
+        int x = 1, y = 1, q = 1;
+
+        y = x - q * y;
+        x = b;
+        for (int i = 0; i < msg.length(); i++) {
+            CTxT = CTxT + (a * msg[i] + b) % 26;
+        }
+        System.out.println(CTxT);
+    }
+}
+
