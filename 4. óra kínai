@@ -1,0 +1,40 @@
+package components;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
+
+public class ChineseRemainderTheorem {
+
+	public static BigInteger crt(List<BigInteger> c, List<BigInteger> m) {
+
+		BigInteger M = (m.stream().reduce((a, b) -> a.multiply(b))).get();
+		BigInteger x = BigInteger.ZERO;
+
+		for (int i = 0; i < c.size(); i++) {
+			BigInteger Mi = M.divide(m.get(i));
+			BigInteger yi = ModInverse.modInverse(Mi, m.get(i));
+			x = x.add(c.get(i).multiply(Mi).multiply(yi));
+		}
+		
+		x = x.mod(M);
+		
+		return x;
+	}
+
+	public static void main(String[] args) {
+
+		List<BigInteger> c = new ArrayList<>();
+		List<BigInteger> m = new ArrayList<>();
+
+		c.add(BigInteger.valueOf(0));
+		c.add(BigInteger.valueOf(1));
+		c.add(BigInteger.valueOf(2));
+
+		m.add(BigInteger.valueOf(5));
+		m.add(BigInteger.valueOf(3));
+		m.add(BigInteger.valueOf(4));
+
+		System.out.println(crt(c, m));
+	}
+}
