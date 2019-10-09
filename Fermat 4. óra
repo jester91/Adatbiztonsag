@@ -1,0 +1,42 @@
+package components;
+
+import java.math.BigInteger;
+import java.util.Random;
+import components.ModPow;
+
+public class FermatTest {
+
+	public static boolean fermatTest(BigInteger n, int k) {
+
+		// Corner cases
+		if (n.compareTo(BigInteger.ONE) <= 0 || n.compareTo(new BigInteger("4")) == 0)
+			return false;
+		if (n.compareTo(new BigInteger("3")) <= 0)
+			return true;
+
+		while (k > 0) {
+			// Pick a random number in [2..n-2]
+			Random rand = new Random();
+			BigInteger a;
+			do {
+				a = BigInteger.TWO.add(new BigInteger(n.bitLength(), rand));
+			} while (a.compareTo(n.subtract(BigInteger.TWO)) >= 0 && Euclidean.euclidean(a, n).equals(BigInteger.ONE));
+
+			// Fermat's little theorem
+			if (!ModPow.modPow(a, n.subtract(BigInteger.ONE), n).equals(BigInteger.ONE))
+				return false;
+
+			k--;
+		}
+
+		return true;
+	}
+
+	public static void main(String args[]) {
+		int k = 3;
+		System.out.println(fermatTest(BigInteger.valueOf(1299825), k));
+		System.out.println(fermatTest(BigInteger.valueOf(1299827), k));
+
+	}
+
+}
