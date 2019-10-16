@@ -1,0 +1,284 @@
+package com.company;
+import java.io.*;
+import java.util.Scanner;
+import java.util.*;
+import java.math.BigInteger;
+public class Main {
+
+    public static void main(String[] args) {
+        kibovitett(139, 14);
+        modinvers(139, 14);
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("Üsd be az uzenetet ");
+        String message = sc.next();
+        System.out.println("Az uzenet :" + message);
+        System.out.println("kodolt uzenet : "
+                + encryptionMessage(message));
+        System.out.println("dekodolt uzenet: "
+                + decryptionMessage(encryptionMessage(message)));
+        sc.close();
+
+        System.out.println(isPrime(1299827,1));
+
+    }
+
+
+    public static void encryptFile(String inputFile,String outputFile) throws IOException{
+        InputStream inputStream=new FileInputStream(inputFile);
+        Reader inputStreamReader= new InputStreamReader(inputStream);
+        OutputStream outputStream= new FileOutputStream(outputFile);
+        OutputStreamWriter outputStreamWriter=new OutputStreamWriter(outputStream);
+
+        int data=inputStreamReader.read();
+
+        while(data!=-1){
+            Character theChar=(char) data;
+            outputStreamWriter.write(decryptionMessage(theChar.toString()));
+
+        }
+
+
+    }
+
+    public static void kibovitett(int a, int b) {
+        int x0 = 1;
+        int x1 = 0;
+        int y0 = 0;
+        int y1 = 1;
+        int r, q, x, y;
+        int s = 1;
+
+        while (b != 0) {
+            r = a % b;
+            q = a / b;
+            a = b;
+            b = r;
+
+            x = x1;
+            y = y1;
+
+            x1 = q * x1 + x0;
+            y1 = q * y1 + y0;
+
+            x0 = x;
+            y0 = y;
+            s = -s;
+
+
+        }
+        x = s * x0;
+        y = s * (-y0);
+        System.out.println(a + " " + x + " " + y);
+
+    }
+
+    public static void modinvers(int a, int m) {
+        int m0 = m;
+        int x = 1;
+        int y = 0;
+        int q, b;
+
+
+        if (m == 1) {
+            System.out.println(0);
+            ;
+        }
+        while (a > 1) {
+            q = a / m;
+            b = m;
+            m = a % m;
+            a = b;
+            b = y;
+            y = x - q * y;
+            x = b;
+
+
+        }
+        if (x < 0) {
+            x += m0;
+        }
+
+        System.out.println(x);
+    }
+
+    public static String encryptionMessage(String Msg) {
+        String CTxt = "";
+        int a = 5;
+        int b = 8;
+        int x = 1, y = 1, q = 1;
+
+        y = x - q * y;
+        x = b;
+        for (int i = 0; i < Msg.length(); i++) {
+            CTxt = CTxt + (char) ((((a * Msg.charAt(i)) + b) % 26) + 65);
+        }
+        return CTxt;
+    }
+    public static String decryptionMessage(String CTxt){
+        String Msg="";
+        int a=5;
+        int b=8;
+        int a_inv=0;
+        int flag=0;
+
+        for(int i=0;i<26;i++)
+        {
+            flag=(a*i)%26;
+            if(flag==1){
+                a_inv=i;
+                System.out.println(i);
+            }
+        }
+        for (int i=0;i<CTxt.length();i++)
+        {
+            Msg=Msg+(char)(((a_inv*((CTxt.charAt(i)-b))%26))+65);
+        }
+
+        return Msg;
+    }
+    static class GFG{
+        static int power(int a,int n,int p){
+            int res=1;
+            a=a%p;
+            while(n>0){
+                if((n&1)==1)
+                    res=(res*a)%p;
+                n=n>>1;
+                a=(a*a)%p;
+            }
+            return res;
+        }
+        static boolean Fermat(int n,int k){
+            if(n<=1 || n==4) return false;
+            if(n<=3) return true;
+
+            while(k>0){
+                int a=2+(int)(Math.random()%(n-4));
+
+                if(power(a,n-1,n)!=1)
+                    return false;
+
+                k--;
+            }
+            return true;
+        }
+
+        static int inv(int a,int m){
+            int m0=m,t,q;
+            int x0=1,x1=1;
+            if(m==1)
+                return 0;
+            while(a>1){
+                q=a/m;
+                t=m;
+
+                m=a%m;a=t;
+                t=x0;
+                x0=x1-q*x0;
+                x1=t;
+            }
+
+            if(x1<0)
+                x1+=m0;
+            return x1;
+
+        }
+
+        static int findMinX(int num[],int rem[],int k){
+            int prod=1;
+            for(int i=0;i<k;i++)
+                prod*=num[i];
+
+            int result=0;
+
+            for(int i=0;i<k;i++){
+                int pp=prod/num[i];
+                result+=rem[i]*inv(pp,num[i])*pp;
+            }
+
+            return result%prod;
+        }
+
+
+    }
+
+    public static boolean MilerRabinBASE(int n, int d){
+        Random rand=new Random();
+        int a=rand.nextInt(n)+3;
+        int x= GFG.power(a,d,n);
+        if(x==1 || x==n-1){
+            return true;
+        }
+
+        while(d !=n-1){
+            x=(x*x)%n;
+            d=d*2;
+            if(x==1)
+                return false;
+            if(x==n-1)
+                return true;
+        }
+        return false;
+    }
+    public static boolean isPrime(int n,int k){
+        if(n<=1 || n==4)
+            return false;
+        if(n<=3)
+            return true;
+
+        int m=n-1;
+        while (m%2==0)
+            m=m/2;
+
+        for(int i=0;i<k;i++)
+            if (!MilerRabinBASE(n,m))
+                return false;
+
+        return true;
+
+    }
+    public static class FindPrimitiveSample {
+
+        public static List<BigInteger> findPrimefactors(BigInteger n) {
+            List<BigInteger> result = new ArrayList<>();
+            while (n.mod(BigInteger.TWO).equals(BigInteger.ZERO)) {
+                result.add(BigInteger.TWO);
+                n = n.divide(BigInteger.TWO);
+            }
+            for (BigInteger i = BigInteger.valueOf(3); i.compareTo(n.sqrt()) <= 0; i = i.add(BigInteger.TWO)) {
+                while (n.mod(i).equals(BigInteger.ZERO)) {
+                    result.add(i);
+                    n = n.divide(i);
+                }
+            }
+            if (n.compareTo(BigInteger.TWO) > 0) {
+                result.add(n);
+            }
+            return result;
+        }
+
+        // Function to find smallest primitive root of n
+        public static BigInteger findPrimitive(BigInteger n) {
+            if(MilerRabinBASE(n,10)==false){
+                return BigInteger.ONE.negate();
+            }
+
+            BigInteger phi=n.subtract(BigInteger.ONE);
+            List<BigInteger> s=findPrimefactors(phi);
+            nextNumber:for(BigInteger i=BigInteger.TWO;i.compareTo(phi)<=0;i=i.add(BigInteger.valueOf(1))){
+                for (BigInteger primeFactor:s){
+                    if(ModPow.modPow(i,phi.divide(primeFactor),n).equals(BigInteger.ONE))
+                        continue nextNumber;
+                }
+            }
+            return i;
+        }
+
+
+    }
+
+
+
+
+}
