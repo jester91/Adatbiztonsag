@@ -51,7 +51,7 @@ public class GreetingServerSample {
 			System.out.println("From Server : Private Key = " + b);
 			
 			//TODO calculation of B
-			B = null; 
+			BigInteger B = g.modPow(a,p);
 			Bstr = B.toString();
 
 			// Sends data to client
@@ -62,7 +62,7 @@ public class GreetingServerSample {
 			out.writeUTF(Bstr); // Sending B
 			
 			//TODO calculation of Bdash
-			Bdash = null;
+			BigInteger Bdash = g.modPow(a,p);
 
 			System.out.println("Secret Key to perform Symmetric Encryption = " + Bdash);
 			server.close();
