@@ -1,0 +1,77 @@
+package Ciper;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.math.BigInteger;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.SocketTimeoutException;
+import java.util.Random;
+
+import components.Euclidean;
+import components.ModPow;
+
+public class GreetingServerSample {
+	public static void main(String[] args) throws IOException {
+		try {
+			int port = 8088;
+
+			// Client p, g, and key
+			BigInteger clientN, clientG, clientA, B, Bdash;
+			String Bstr;
+
+			// Established the Connection
+			ServerSocket serverSocket = new ServerSocket(port);
+			System.out.println("Waiting for client on port " + serverSocket.getLocalPort() + "...");
+			Socket server = serverSocket.accept();
+			System.out.println("Just connected to " + server.getRemoteSocketAddress());
+
+			// Accepts the data from client
+			DataInputStream in = new DataInputStream(server.getInputStream());
+
+			clientN = new BigInteger(in.readUTF()); // to accept p
+			System.out.println("From Client : P = " + clientN);
+
+			clientG = new BigInteger(in.readUTF()); // to accept g
+			System.out.println("From Client : G = " + clientG);
+
+			clientA = new BigInteger(in.readUTF()); // to accept A
+			System.out.println("From Client : Public Key = " + clientA);
+
+			// Server Key
+			Random rand = new Random();
+			BigInteger b;
+			do {
+				b = BigInteger.TWO.add(new BigInteger(clientN.bitLength(), rand));
+			} while (b.compareTo(clientN.subtract(BigInteger.TWO)) >= 0 && Euclidean.euclidean(b, clientN).equals(BigInteger.ONE));
+
+			// Server's Private Key
+			System.out.println("From Server : Private Key = " + b);
+			
+			//TODO calculation of B
+			B = null; 
+			Bstr = B.toString();
+
+			// Sends data to client
+			// Value of B
+			OutputStream outToclient = server.getOutputStream();
+			DataOutputStream out = new DataOutputStream(outToclient);
+
+			out.writeUTF(Bstr); // Sending B
+			
+			//TODO calculation of Bdash
+			Bdash = null;
+
+			System.out.println("Secret Key to perform Symmetric Encryption = " + Bdash);
+			server.close();
+			serverSocket.close();
+		}
+
+		catch (SocketTimeoutException s) {
+			System.out.println("Socket timed out!");
+		} catch (IOException e) {
+		}
+	}
+}
