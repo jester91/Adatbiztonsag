@@ -1,0 +1,75 @@
+package Ciper;
+
+import java.net.*;
+import java.util.Random;
+
+import components.Euclidean;
+import components.ModPow;
+
+import java.io.*;
+import java.math.BigInteger; 
+  
+public class GreetingClientSample { 
+    public static void main(String[] args) 
+    { 
+        try { 
+            String pstr, gstr, Astr; 
+            String serverName = "localhost"; 
+            int port = 8088; 
+  
+            // Declare p, g, and Key of client 
+            BigInteger n = BigInteger.valueOf(23); 
+            BigInteger g = FindPrimitive.findPrimitive(n); 
+            BigInteger a;
+            Random rand = new Random();
+			do {
+				a = BigInteger.TWO.add(new BigInteger(n.bitLength(), rand));
+			} while (a.compareTo(n.subtract(BigInteger.TWO)) >= 0 && Euclidean.euclidean(a, n).equals(BigInteger.ONE));
+
+			
+			//TODO - calculation of A
+			BigInteger A =null; 
+			
+			BigInteger Adash, serverB; 
+  
+            // Established the connection 
+            System.out.println("Connecting to " + serverName 
+                               + " on port " + port); 
+            Socket client = new Socket(serverName, port); 
+            System.out.println("Just connected to "
+                               + client.getRemoteSocketAddress()); 
+  
+            // Sends the data to client 
+            OutputStream outToServer = client.getOutputStream(); 
+            DataOutputStream out = new DataOutputStream(outToServer); 
+  
+            pstr = n.toString(); 
+            out.writeUTF(pstr); // Sending p 
+  
+            gstr = g.toString(); 
+            out.writeUTF(gstr); // Sending g 
+  
+            Astr = A.toString(); 
+            out.writeUTF(Astr); // Sending A 
+  
+            // Client's Private Key 
+            System.out.println("From Client : Private Key = " + a); 
+  
+            // Accepts the data 
+            DataInputStream in = new DataInputStream(client.getInputStream()); 
+  
+            serverB = new BigInteger(in.readUTF()); 
+            System.out.println("From Server : Public Key = " + serverB); 
+            
+            //TODO calculation of Adash
+            Adash = null;  
+  
+            System.out.println("Secret Key to perform Symmetric Encryption = "
+                               + Adash); 
+            client.close(); 
+        } 
+        catch (Exception e) { 
+            e.printStackTrace(); 
+        } 
+    } 
+} 
