@@ -28,7 +28,7 @@ public class GreetingClientSample {
 
 			
 			//TODO - calculation of A
-			BigInteger A =null; 
+            BigInteger A = g.modPow(a,p);
 			
 			BigInteger Adash, serverB; 
   
@@ -62,7 +62,8 @@ public class GreetingClientSample {
             System.out.println("From Server : Public Key = " + serverB); 
             
             //TODO calculation of Adash
-            Adash = null;  
+
+            BigInteger Adash = g.modPow(a,p);
   
             System.out.println("Secret Key to perform Symmetric Encryption = "
                                + Adash); 
